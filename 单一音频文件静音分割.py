@@ -7,8 +7,8 @@ def load_audio(filepath):
     data, samplerate = sf.read(filepath)
     return data, samplerate
 
-audio_file = '80-90年代经典老歌尽在-经典老歌500首一人一首成名曲.wav'
-output_dir = '/Users/lixiao/Desktop/80-90'
+audio_file = 'path/to/audio_file'
+output_dir = 'path/to/output_dir'
 silence_threshold = -30
 
 # 载入音频
