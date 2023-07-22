@@ -138,7 +138,7 @@ def main():
             input_file = input("请输入输入图片文件路径：")
             output_file = input("请输入输出图片文件路径：")
             watermark_type = input("请输入水印类型（文本/图片）：")
-            watermark_content = input("请输入水印内容（文本或水印图片路径）：")
+            watermark_content = input("请输入水印内容（限定：文本类型只能输入文字；图片类型输入水印图片路径）：")
 
             if watermark_type == "文本":
                 font_size = get_numeric_input("请输入字体大小：", int)
