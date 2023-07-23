@@ -9,7 +9,8 @@ def get_audio_format(file_path):
 def convert_audio_with_pydub(source_file, target_format):
     audio = AudioSegment.from_file(source_file)
     target_file = os.path.splitext(source_file)[0] + '.' + target_format
-    audio.export(target_file, format=target_format)
+    # 指定更高的音频比特率（根据需要调整）
+    audio.export(target_file, format=target_format, bitrate='128k')
     return target_file
 
 def convert_audio_with_ffmpeg(source_file, target_format):
