@@ -25,7 +25,7 @@ def check_existing_bookmarks(audio_path, bookmarks_file):
 
 
 def insert_bookmark(audio_path):
-    bookmarks_file = "bookmarks.txt"
+    bookmarks_file = "../bookmarks.txt"
     existing_bookmarks = check_existing_bookmarks(audio_path, bookmarks_file)
 
     print("已存在的书签：")
