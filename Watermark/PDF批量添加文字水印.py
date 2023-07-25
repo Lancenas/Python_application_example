@@ -1,9 +1,9 @@
+import os
 import PyPDF2
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-import os
 from PIL import Image
 
 def load_custom_font(font_path):
@@ -104,22 +104,11 @@ def add_image_watermark(input_pdf, output_pdf, image_path, opacity=0.5, x_offset
 
 if __name__ == "__main__":
     while True:
-        # 输入文件名、水印文字、自定义字体路径以及其他参数
-        input_pdf_filename = input("请输入输入PDF文件名（包含路径）：")
-        default_output_pdf_filename = input_pdf_filename.replace(".pdf", "_watermark.pdf")
-
-        output_pdf_filename = input("请输入输出PDF文件名（包含路径）（留空使用默认值：{}）：".format(default_output_pdf_filename))
-        if not output_pdf_filename.strip():  # Check if input is empty
-            output_pdf_filename = default_output_pdf_filename
-        elif output_pdf_filename.endswith("/"):
-            output_pdf_filename += input_pdf_filename.split("/")[-1].replace(".pdf", "_watermark.pdf")
-
+        folder_path = input("请输入要处理的文件夹路径：")
         watermark_type = input("请选择水印类型（输入 'text' 或 'image'）：")
-        if watermark_type.lower() == 'text':
-            watermark_text = input("请输入水印文字（留空使用预置值“The is Watermark”）：")
-            if not watermark_text.strip():  # Check if input is empty
-                watermark_text = "The is Watermark"
 
+        if watermark_type.lower() == 'text':
+            watermark_text = input("请输入水印文字：")
             custom_font_path = input("请输入字体文件的路径（留空使用预置值“/Library/Fonts/Microsoft/SimHei.ttf”）：")
             if not custom_font_path.strip():  # Check if input is empty
                 custom_font_path = "/Library/Fonts/Microsoft/SimHei.ttf"
@@ -134,13 +123,13 @@ if __name__ == "__main__":
             if not opacity_input.strip():  # Check if input is empty
                 opacity = 0.2
             else:
-                opacity = float(opacity_input)
+                opacity = float(font_size_input)
 
             rotation_input = input("请输入水印旋转角度（0-360之间）（留空使用预置值“30”）：")
             if not rotation_input.strip():  # Check if input is empty
                 rotation = 30
             else:
-                rotation = int(rotation_input)
+                rotation = int(font_size_input)
 
             x_spacing_input = input("请输入水印横向间距（留空使用预置值“150”）：")
             if not x_spacing_input.strip():  # Check if input is empty
@@ -154,31 +143,51 @@ if __name__ == "__main__":
             else:
                 y_spacing = int(y_spacing_input)
 
-            # 添加水印
-            add_text_watermark(input_pdf_filename, output_pdf_filename, watermark_text, custom_font_path, font_size,
-                               opacity, rotation, x_spacing, y_spacing)
+            # 获取指定文件夹内的所有PDF文件
+            pdf_files = [f for f in os.listdir(folder_path) if f.lower().endswith('.pdf')]
+
+            for pdf_file in pdf_files:
+                input_pdf_filename = os.path.join(folder_path, pdf_file)
+                default_output_pdf_filename = input_pdf_filename.replace(".pdf", "_watermark.pdf")
+
+                # 添加文字水印
+                add_text_watermark(input_pdf_filename, default_output_pdf_filename, watermark_text, custom_font_path,
+                                   font_size,
+                                   opacity, rotation, x_spacing, y_spacing)
+
+            print("文字水印添加完成！")
+
         elif watermark_type.lower() == 'image':
             image_path = input("请输入水印图片的路径：")
             opacity_input = input("请输入水印透明度（0-1之间）（留空使用预置值“0.2”）：")
             if not opacity_input.strip():  # Check if input is empty
                 opacity = 0.2
-            else:
-                opacity = float(opacity_input)
 
-            x_offset_input = input("请输入水印横向偏移量（默认居中，预置值“0”）：")
+            x_offset_input = input("请输入水印横向间距（留空使用预置值“0”）：")
             if not x_offset_input.strip():  # Check if input is empty
                 x_offset = 0
             else:
                 x_offset = int(x_offset_input)
 
-            y_offset_input = input("请输入水印纵向偏移量（默认居中，预置值“0”）：")
+            y_offset_input = input("请输入水印纵向间距（留空使用预置值“0”）：")
             if not y_offset_input.strip():  # Check if input is empty
                 y_offset = 0
             else:
                 y_offset = int(y_offset_input)
 
-            # 添加图片水印
-            add_image_watermark(input_pdf_filename, output_pdf_filename, image_path, opacity, x_offset, y_offset)
+            # 获取指定文件夹内的所有PDF文件
+            pdf_files = [f for f in os.listdir(folder_path) if f.lower().endswith('.pdf')]
+
+            for pdf_file in pdf_files:
+                input_pdf_filename = os.path.join(folder_path, pdf_file)
+                default_output_pdf_filename = input_pdf_filename.replace(".pdf", "_watermark.pdf")
+
+                # 添加图片水印
+                add_image_watermark(input_pdf_filename, default_output_pdf_filename, image_path, opacity, x_offset,
+                                    y_offset)
+
+            print("图片水印添加完成！")
+
         else:
             print("选择无效。")
 
