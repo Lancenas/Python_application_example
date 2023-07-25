@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-DEFAULT_FONT_PATH = "/Library/Fonts/AdobeSongStd-Light.otf"  # Change this to your desired default font path
+DEFAULT_FONT_PATH = "/Library/Fonts/Microsoft/SimHei.ttf"  # Change this to your desired default font path
 
 def get_font(font_size):
     default_font = ImageFont.load_default()
@@ -129,22 +129,53 @@ def main():
     while True:
         print("请选择操作类型：")
         print("1 - 处理单个图片文件")
-        print("2 - 处理图片文件夹")
+        print("2 - 批量处理图片文件夹")
         print("e - 退出进程")
 
         choice = input("请输入选择：")
 
         if choice == "1":
             input_file = input("请输入输入图片文件路径：")
-            output_file = input("请输入输出图片文件路径：")
-            watermark_type = input("请输入水印类型（文本/图片）：")
-            watermark_content = input("请输入水印内容（限定：文本类型只能输入文字；图片类型输入水印图片路径）：")
+            # 获取文件名和文件后缀名，使用 os.path.splitext 函数
+            file_name, file_extension = os.path.splitext(input_file)
 
-            if watermark_type == "文本":
-                font_size = get_numeric_input("请输入字体大小：", int)
-                opacity = get_numeric_input("请输入透明度（0.0至1.0）：", float)
-                angle = get_numeric_input("请输入旋转角度（以度为单位）：", int)
-                spacing = get_numeric_input("请输入水印间距：", int)
+            # 将原始文件后缀替换为 "_watermark" 并加上新的后缀
+            default_output_file = file_name + "_watermark" + file_extension
+
+            output_file = input("请输入输出图片文件名（包含路径）（留空使用默认值：{}）：".format(default_output_file))
+            if not output_file.strip():  # 检查用户输入是否为空
+                output_file = default_output_file
+            elif output_file.endswith("/"):
+                # 处理用户输入的输出路径为目录的情况，使用 os.path.basename 获取原始文件名并替换为新的输出文件名
+                output_file = os.path.join(output_file, os.path.basename(input_file).replace(file_extension, "_watermark" + file_extension))
+
+            watermark_type = input("请输入水印类型（text/image）：")
+
+            if watermark_type == "text":
+                watermark_content = input("请输入水印文字内容 ：")
+                font_size_input = input("请输入字体大小（留空使用预置值“16”）：")
+                if not font_size_input.strip():  # Check if input is empty
+                    font_size = 16
+                else:
+                    font_size = int(font_size_input)
+
+                opacity_input = input("请输入水印透明度（0-1之间）（留空使用预置值“0.5”）：")
+                if not opacity_input.strip():  # Check if input is empty
+                    opacity = 0.5
+                else:
+                    opacity = float(opacity_input)
+
+                angle_input = input("请输入水印旋转角度（0-360之间）（留空使用预置值“30”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    angle = 30
+                else:
+                    angle = int(angle_input)
+
+                spacing_input = input("请输入水印间距（留空使用预置值“50”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    spacing = 50
+                else:
+                    spacing = int(spacing_input)
 
                 if os.path.isfile(input_file):
                     add_text_watermark(input_file, output_file, watermark_content,
@@ -152,10 +183,25 @@ def main():
                 else:
                     print("输入文件不存在。")
 
-            elif watermark_type == "图片":
-                opacity = get_numeric_input("请输入透明度（0.0至1.0）：", float)
-                angle = get_numeric_input("请输入旋转角度（以度为单位）：", int)
-                spacing = get_numeric_input("请输入水印间距：", int)
+            elif watermark_type == "image":
+                watermark_content = input("请输入水印图片路径：")
+                opacity_input = input("请输入水印透明度（0-1之间）（留空使用预置值“0.5”）：")
+                if not opacity_input.strip():  # Check if input is empty
+                    opacity = 0.5
+                else:
+                    opacity = float(opacity_input)
+
+                angle_input = input("请输入水印旋转角度（0-360之间）（留空使用预置值“30”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    angle = 30
+                else:
+                    angle = int(angle_input)
+
+                spacing_input = input("请输入水印间距（留空使用预置值“100”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    spacing = 100
+                else:
+                    spacing = int(spacing_input)
 
                 if os.path.isfile(input_file):
                     add_image_watermark(input_file, output_file, watermark_content,
@@ -164,19 +210,39 @@ def main():
                     print("输入文件不存在。")
 
             else:
-                print("不支持的水印类型。请输入“文本”或“图片”。")
+                print("不支持的水印类型。请输入“text”或“image”。")
 
         elif choice == "2":
             input_folder = input("请输入输入图片文件夹路径：")
             output_folder = input("请输入输出图片文件夹路径：")
-            watermark_type = input("请输入水印类型（文本/图片）：")
-            watermark_content = input("请输入水印内容（文本或水印图片路径）：")
+            # 输入水印类型
+            watermark_type = input("请输入水印类型（text/image）：")
 
-            if watermark_type == "文本":
-                font_size = get_numeric_input("请输入字体大小：", int)
-                opacity = get_numeric_input("请输入透明度（0.0至1.0）：", float)
-                angle = get_numeric_input("请输入旋转角度（以度为单位）：", int)
-                spacing = get_numeric_input("请输入水印间距：", int)
+            if watermark_type == "text":
+                watermark_content = input("请输入水印文字内容：")
+                font_size_input = input("请输入字体大小（留空使用预置值“16”）：")
+                if not font_size_input.strip():  # Check if input is empty
+                    font_size = 16
+                else:
+                    font_size = int(font_size_input)
+
+                opacity_input = input("请输入水印透明度（0-1之间）（留空使用预置值“0.5”）：")
+                if not opacity_input.strip():  # Check if input is empty
+                    opacity = 0.5
+                else:
+                    opacity = float(opacity_input)
+
+                angle_input = input("请输入水印旋转角度（0-360之间）（留空使用预置值“30”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    angle = 30
+                else:
+                    angle = int(angle_input)
+
+                spacing_input = input("请输入水印间距（留空使用预置值“50”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    spacing = 50
+                else:
+                    spacing = int(spacing_input)
 
                 if os.path.isdir(input_folder):
                     batch_add_watermark(input_folder, output_folder, watermark_type, watermark_content,
@@ -184,10 +250,25 @@ def main():
                 else:
                     print("输入文件夹不存在。")
 
-            elif watermark_type == "图片":
-                opacity = get_numeric_input("请输入透明度（0.0至1.0）：", float)
-                angle = get_numeric_input("请输入旋转角度（以度为单位）：", int)
-                spacing = get_numeric_input("请输入水印间距：", int)
+            elif watermark_type == "image":
+                watermark_content = input("请输入水印图片路径：")
+                opacity_input = input("请输入水印透明度（0-1之间）（留空使用预置值“0.5”）：")
+                if not opacity_input.strip():  # Check if input is empty
+                    opacity = 0.5
+                else:
+                    opacity = float(opacity_input)
+
+                angle_input = input("请输入水印旋转角度（0-360之间）（留空使用预置值“0”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    angle = 0
+                else:
+                    angle = int(angle_input)
+
+                spacing_input = input("请输入水印间距（留空使用预置值“100”）：")
+                if not angle_input.strip():  # Check if input is empty
+                    spacing = 100
+                else:
+                    spacing = int(spacing_input)
 
                 if os.path.isdir(input_folder):
                     batch_add_watermark(input_folder, output_folder, watermark_type, watermark_content,
@@ -196,7 +277,7 @@ def main():
                     print("输入文件夹不存在。")
 
             else:
-                print("不支持的水印类型。请输入“文本”或“图片”。")
+                print("不支持的水印类型。请输入“text”或“image”。")
 
         elif choice.lower() == "e":
             break

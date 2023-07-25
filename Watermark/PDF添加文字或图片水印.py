@@ -106,13 +106,18 @@ if __name__ == "__main__":
     while True:
         # 输入文件名、水印文字、自定义字体路径以及其他参数
         input_pdf_filename = input("请输入输入PDF文件名（包含路径）：")
-        default_output_pdf_filename = input_pdf_filename.replace(".pdf", "_watermark.pdf")
+        # 获取文件名和文件后缀名，使用 os.path.splitext 函数
+        file_name, file_extension = os.path.splitext(input_pdf_filename)
 
-        output_pdf_filename = input("请输入输出PDF文件名（包含路径）（留空使用默认值：{}）：".format(default_output_pdf_filename))
-        if not output_pdf_filename.strip():  # Check if input is empty
+        # 将原始文件后缀替换为 "_watermark" 并加上新的后缀
+        default_output_pdf_filename = file_name + "_watermark" + file_extension
+
+        output_pdf_filename = input("请输入输出图片文件名（包含路径）（留空使用默认值：{}）：".format(default_output_pdf_filename))
+        if not output_pdf_filename.strip():  # 检查用户输入是否为空
             output_pdf_filename = default_output_pdf_filename
         elif output_pdf_filename.endswith("/"):
-            output_pdf_filename += input_pdf_filename.split("/")[-1].replace(".pdf", "_watermark.pdf")
+            # 处理用户输入的输出路径为目录的情况，使用 os.path.basename 获取原始文件名并替换为新的输出文件名
+            output_pdf_filename = os.path.join(output_pdf_filename, os.path.basename(input_pdf_filename).replace(file_extension, "_watermark" + file_extension))
 
         watermark_type = input("请选择水印类型（输入 'text' 或 'image'）：")
         if watermark_type.lower() == 'text':
