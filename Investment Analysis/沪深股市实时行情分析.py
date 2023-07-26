@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 def get_daily_quotes(stock_code, start_date, end_date):
-    ts.set_token('c96bfb91e26676f8127aa8e473c48af9403d091c971ed282baf4be68')
+    ts.set_token('c96bfb91e26676f8127aa8e473c48af9403d091c971ed282baf4be68-1')
     pro = ts.pro_api()
     df = pro.daily(ts_code=stock_code, start_date=start_date, end_date=end_date)
     if not df.empty:

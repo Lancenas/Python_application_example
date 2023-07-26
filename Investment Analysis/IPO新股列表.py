@@ -3,7 +3,7 @@ import pandas as pd  # Don't forget to import the pandas library!
 
 # Replace 'YOUR_TUSHARE_API_KEY' with your Tushare API key (optional)
 # If you don't have an API key, you can still use the library but with limited access.
-ts.set_token('c96bfb91e26676f8127aa8e473c48af9403d091c971ed282baf4be68')
+ts.set_token('c96bfb91e26676f8127aa8e473c48af9403d091c971ed282baf4be68-1')
 
 # Initialize the Tushare pro API
 pro = ts.pro_api()
