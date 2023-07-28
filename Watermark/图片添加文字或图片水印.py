@@ -1,7 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-DEFAULT_FONT_PATH = "/Library/Fonts/Microsoft/SimHei.ttf"  # Change this to your desired default font path
+#DEFAULT_FONT_PATH = "/Library/Fonts/Microsoft/SimHei.ttf"  # Mac Change this to your desired default font path
+DEFAULT_FONT_PATH = "C:\Windows\Fonts\msyh.ttc"
 
 def get_font(font_size):
     default_font = ImageFont.load_default()
