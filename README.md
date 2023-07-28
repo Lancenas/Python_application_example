@@ -57,6 +57,8 @@
    - 其它功能和单文件添加水印相同。
    
 ### Investment_Analysis（投资分析）
+沪深股市数据来源于-Tushare，运行代码需要`Tushare Token`。
+如何获取可以浏览：[Python沪深股市绘制双曲线+交易量+K线分析绘制买卖信号图](https://mtom.top/archives/534429/)
 
 1. IPO新股列表.py
    - 获取指定时间内新股发行信息；
