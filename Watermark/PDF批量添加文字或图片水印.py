@@ -109,9 +109,10 @@ if __name__ == "__main__":
 
         if watermark_type.lower() == 'text':
             watermark_text = input("请输入水印文字：")
-            custom_font_path = input("请输入字体文件的路径（留空使用预置值“/Library/Fonts/Microsoft/SimHei.ttf”）：")
+            custom_font_path = input("请输入字体文件的路径（留空使用预置值“Mac默认SimHei.ttf；Windows默认msyh.ttc”）：")
             if not custom_font_path.strip():  # Check if input is empty
-                custom_font_path = "/Library/Fonts/Microsoft/SimHei.ttf"
+                #custom_font_path = "/Library/Fonts/Microsoft/SimHei.ttf"  #Mac默认字体路径
+                custom_font_path = "C:\Windows\Fonts\msyh.ttc"  #Windows默认字体路径
 
             font_size_input = input("请输入字体大小（留空使用预置值“24”）：")
             if not font_size_input.strip():  # Check if input is empty
